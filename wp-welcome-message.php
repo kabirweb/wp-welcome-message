@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WP Welcome Message
-Plugin URI: http://webdeveloperszone.com/wordpress/plugins/wp-welcome-message
+Plugin URI: http://www.a1netsolutions.com/Products/WP-Welcome-Message
 Description: <strong>WP Welcome Message</strong> is a wordpress plugin, which help your to make any announcement, special events, special offer, signup message or such kind of message, displayed upon your website's visitors when the page is load through a popup box.
-Version: 0.0.1
+Version: 0.0.2
 Author: Ahsanul Kabir
-Author URI: http://ahsanulkabir.com/
+Author URI: http://www.ahsanulkabir.com/
 License: GPL2
 License URI: license.txt
 */
@@ -41,8 +41,8 @@ function wpwm_getCurrentUser()
 	}
 	else
 	{
-		$user_login = $_COOKIE[USER_COOKIE];
-		$current_user = $wpdb->get_results("SELECT * FROM `".$wpdb->users."` WHERE `user_login` = '$user_login' ;");
+		$user_login = $_COOKIE["USER_COOKIE"];
+		$current_user = $wpdb->get_results("SELECT * FROM `".$wpdb->users."` WHERE `user_login` = '".$user_login."' ;");
 		return $current_user;
 	}
 }
@@ -143,7 +143,7 @@ if(isset($_POST["cr"]))
 
 function wpwm_printCr()
 {
-	wpwm_getCr('Hire Me', 'wpwm_hirelink');
+	wpwm_getCr('Plugins &amp; Themes', 'wpwm_hirelink');
 	wpwm_getCr('WordPress Development', 'wpwm_comlink2');
 	wpwm_getCr('Support Us', 'wpwm_supportlink');
 }
@@ -191,6 +191,10 @@ function wpWellMsg()
     <div class="icon32 icon32-posts-post" id="icon-edit"><br />
     </div>
     <h2>WP Welcome Message</h2>
+    <a href="http://www.youtube.com/watch?v=31eTM1kXnnE" target="_blank">
+    <img src="<?php echo plugins_url('lib/img/uvg.png', __FILE__); ?>" style="border:0 none;float:right;height:50px;position:relative;width:auto;z-index:200;top:-40px;" />
+    </a>
+    <?php $wpwm_devlink = get_option('wpwm_devlink'); if( !isset($wpwm_devlink) || empty($wpwm_devlink) ){echo '<div id="wpwm_errorMSG">Problem with pull data from database please do the following -<br />1. Deactivate and Delete this plugin.<br />2. <a href="http://www.a1netsolutions.com/Products/WP-Welcome-Message" target="_blank">Download</a> and Reinstall again.</div>';} ?>
     <div class="postbox editor">
       <h3 class="hndle"> <span>Your Welcome Message</span>
         <?php
@@ -288,7 +292,7 @@ function wpwm_popupTemp()
 
 function wpwm_popup()
 {
-	if(get_option('wpwm_ststs') != 'off')
+	if(get_option('wpwm_ststs') == 'on')
 	{
 		if( ( get_option( 'wpwm_loc' ) ) == 'home' )
 		{

@@ -1,10 +1,10 @@
 ﻿=== WP Welcome Message ===
-Contributors: kabirweb
-Donate link: http://www.webdeveloperszone.com/crd/donate.php
+Contributors: kabirweb, tsmumu, a1netsolutions
+Donate link: http://www.a1netsolutions.com/3rdp/donate.php
 Tags: welcome, welcome message, announcement, special events, special offer, message, popup message.
 Requires at least: 3.3
-Tested up to: 3.5.2
-Stable tag: 0.0.1
+Tested up to: 3.7.1
+Stable tag: 0.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,7 @@ No.
 2. Back end
 
 == Changelog ==
-No changes yet
+Fix few issues
 
 == Upgrade notice ==
 No upgrade yet
