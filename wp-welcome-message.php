@@ -3,14 +3,14 @@
 Plugin Name: WP Welcome Message
 Plugin URI: http://www.a1netsolutions.com/Products/WP-Welcome-Message
 Description: <strong>WP Welcome Message</strong> is a wordpress plugin, which help your to make any announcement, special events, special offer, signup message or such kind of message, displayed upon your website's visitors when the page is load through a popup box.
-Version: 0.0.3
+Version: 0.1.1
 Author: Ahsanul Kabir
 Author URI: http://www.ahsanulkabir.com/
 License: GPL2
 License URI: license.txt
 */
 
-function wpwmposts_init()
+function wpwm_posts_init()
 {
   $args = array
   (
@@ -25,7 +25,7 @@ function wpwmposts_init()
   ); 
   register_post_type( 'wpwmposts', $args );
 }
-add_action( 'init', 'wpwmposts_init' );
+add_action( 'init', 'wpwm_posts_init' );
 
 function wpwm_getCurrentUser()
 {
@@ -76,42 +76,37 @@ function wpwm_updatePost($inputContent, $id)
 	return $new_post_id;
 }
 
-function wpwm_scriptsMethod()
+function wpwm_frontEndJS()
 {
-	if(!is_admin())
+	wp_enqueue_script('wpwm-frontEndJS', ( plugins_url('lib/js/wpwm_'.get_option( 'wpwm_boxsetly' ).'.js', __FILE__) ), array('jquery'));
+}
+add_action('wp_enqueue_scripts', 'wpwm_frontEndJS');
+
+function wpwm_backEndCss()
+{
+	wp_enqueue_style( 'wpwm-cssB', ( plugins_url('lib/css/wpwm_backEnd.css', __FILE__) ) );
+}
+add_action( 'admin_init', 'wpwm_backEndCss' );
+
+function wpwm_frontEndCss()
+{
+	wp_enqueue_style( 'wpwm-cssF', ( plugins_url('lib/css/wpwm_frontEnd.css', __FILE__) ) );
+}
+add_action( 'wp_enqueue_scripts', 'wpwm_frontEndCss' );
+
+define(WPWM_LIB, "../wp-content/plugins/wp-welcome-message/lib/");
+
+function wpwm_defaults()
+{
+	$wpwm_defaults = WPWM_LIB.'wpwm_defaults.php';
+	if(is_file($wpwm_defaults))
 	{
-		wp_enqueue_script('jquery');
-		wp_register_script('wpwmJs', ( plugins_url('lib/js/'.get_option( 'wpwm_boxsetly' ).'.js', __FILE__) ) );
-		wp_enqueue_script('wpwmJs');
-	}
-}
-add_action('wp_enqueue_scripts', 'wpwm_scriptsMethod');
-
-function wpwm_stylesMethod()
-{
-	wp_register_style( 'wpwmCssB', ( plugins_url('lib/css/backEnd.css', __FILE__) ) );
-	wp_enqueue_style( 'wpwmCssB' );
-}
-add_action( 'admin_init', 'wpwm_stylesMethod' );
-
-function wpwm_stylesMethodFront()
-{
-	wp_register_style( 'wpwmCssF', ( plugins_url('lib/css/frontEnd.css', __FILE__) ) );
-	wp_enqueue_style( 'wpwmCssF' );
-}
-add_action( 'wp_enqueue_scripts', 'wpwm_stylesMethodFront' );
-
-function wpwm_useData()
-{
-	$dataPath = '../wp-content/plugins/wp-welcome-message/lib/data.php';
-	if(is_file($dataPath))
-	{
-		require $dataPath;
+		require $wpwm_defaults;
 		foreach($addOptions as $addOptionK => $addOptionV)
 		{
 			update_option($addOptionK, $addOptionV);
 		}
-		unlink($dataPath);
+		unlink($wpwm_defaults);
 	}
 }
 
@@ -121,7 +116,7 @@ function wpwm_activate()
 	$new_post_id = wpwm_printCreatePost($inputContent);
 	$lastID = get_option( 'wpwm_ststs' );
 	update_option( 'wpwm_postsid', $new_post_id );
-	wpwm_useData();
+	wpwm_defaults();
 }
 register_activation_hook( __FILE__, 'wpwm_activate' );
 
@@ -136,16 +131,11 @@ function wpwm_getCr($k, $v)
 	echo '<div class="postbox wpwm_cr"><h3 class="hndle"><span>'.$k.'</span></h3><div class="inside">'.get_option($v).'</div></div>';
 }
 
-if(isset($_POST["cr"]))
-{
-	update_option( 'wpwm_displayCr', $_POST["cr"] );
-}
-
 function wpwm_printCr()
 {
-	wpwm_getCr('Plugins &amp; Themes', 'wpwm_hirelink');
-	wpwm_getCr('WordPress Development', 'wpwm_comlink2');
-	wpwm_getCr('Support Us', 'wpwm_supportlink');
+	wpwm_getCr('Plugins &amp; Themes', 'wpwm_other');
+	wpwm_getCr('WordPress Development', 'wpwm_hire');
+	wpwm_getCr('Support Us', 'wpwm_support');
 }
 
 function wpwm_select( $iget, $iset, $itxt )
@@ -194,7 +184,7 @@ function wpWellMsg()
     <a href="http://www.youtube.com/watch?v=31eTM1kXnnE" target="_blank">
     <img src="<?php echo plugins_url('lib/img/uvg.png', __FILE__); ?>" style="border:0 none;float:right;height:50px;position:relative;width:auto;z-index:200;top:-40px;" />
     </a>
-    <?php $wpwm_devlink = get_option('wpwm_devlink'); if( !isset($wpwm_devlink) || empty($wpwm_devlink) ){echo '<div id="wpwm_errorMSG">Problem with pull data from database please do the following -<br />1. Deactivate and Delete this plugin.<br />2. <a href="http://www.a1netsolutions.com/Products/WP-Welcome-Message" target="_blank">Download</a> and Reinstall again.</div>';} ?>
+    <?php $wpwm_defaults = get_option('wpwm_defaults'); if( !isset($wpwm_defaults) || empty($wpwm_defaults) ){echo '<div id="wpwm_errorMSG">>Error! please do the following -<br />1. Deactivate and Delete this plugin.<br />2. <a href="http://downloads.wordpress.org/plugin/wp-welcome-message.zip">Download</a> and Reinstall again.</div>';} ?>
     <div class="postbox editor">
       <h3 class="hndle"> <span>Your Welcome Message</span>
         <?php
@@ -287,7 +277,7 @@ function wpwm_popupTemp()
 	$wpwmContent = str_replace(']]>', ']]&gt;', $wpwmContent);
 	echo '<div id="wpwm_popBoxOut"><div id="wpwm_popBox"><img src="'.plugins_url('lib/img/close.png', __FILE__).'" id="wpwm_popClose" />'.$wpwmContent.'</div></div>';
 	if((get_option('wpwm_bgstyle')) == 'on'){echo '<div id="wpwm_hideBody"></div>';}
-	if((get_option('wpwm_displayCr')) != 'off'){echo get_option('wpwm_devlink').get_option('wpwm_comlink');}
+	echo get_option('wpwm_dev').get_option('wpwm_com');
 }
 
 function wpwm_popup()
