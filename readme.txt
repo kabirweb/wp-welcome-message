@@ -4,7 +4,7 @@ Donate link: http://www.a1netsolutions.com/Donate
 Tags: welcome, welcome message, announcement, special events, special offer, message, popup message.
 Requires at least: 3.3
 Tested up to: 3.8
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

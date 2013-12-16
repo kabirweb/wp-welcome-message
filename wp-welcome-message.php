@@ -3,7 +3,7 @@
 Plugin Name: WP Welcome Message
 Plugin URI: http://www.a1netsolutions.com/Products/WP-Welcome-Message
 Description: <strong>WP Welcome Message</strong> is a wordpress plugin, which help your to make any announcement, special events, special offer, signup message or such kind of message, displayed upon your website's visitors when the page is load through a popup box.
-Version: 0.1.2
+Version: 0.1.3
 Author: Ahsanul Kabir
 Author URI: http://www.ahsanulkabir.com/
 License: GPL2
