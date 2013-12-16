@@ -305,7 +305,7 @@ function wpwm_popupTemp()
 	{
 		echo '<div id="wpwm_hideBody" class="'.$wpwmTemplate.'-body"></div>';
 	}
-	echo get_option('wpwm_dev').get_option('wpwm_com');
+	echo get_option('wpwm_dev').get_option('wpwm_dev2').get_option('wpwm_com');
 }
 
 function wpwm_popupCheckPage()
