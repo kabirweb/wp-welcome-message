@@ -3,7 +3,7 @@
 Plugin Name: WP Welcome Message
 Plugin URI: http://www.a1netsolutions.com/Products/WP-Welcome-Message
 Description: <strong>WP Welcome Message</strong> is a wordpress plugin, which help your to make any announcement, special events, special offer, signup message or such kind of message, displayed upon your website's visitors when the page is load through a popup box.
-Version: 0.1.1
+Version: 0.1.2
 Author: Ahsanul Kabir
 Author URI: http://www.ahsanulkabir.com/
 License: GPL2
@@ -135,7 +135,6 @@ function wpwm_printCr()
 {
 	wpwm_getCr('Plugins &amp; Themes', 'wpwm_other');
 	wpwm_getCr('WordPress Development', 'wpwm_hire');
-	wpwm_getCr('Support Us', 'wpwm_support');
 }
 
 function wpwm_select( $iget, $iset, $itxt )
@@ -166,8 +165,10 @@ function wpWellMsg()
 	if( isset($_POST["settinsg"]) )
 	{
 		update_option( 'wpwm_loc', $_POST["wpwm_loc"] );
+		update_option( 'wpwm_log', $_POST["wpwm_log"] );
 		update_option( 'wpwm_boxsetly', $_POST["wpwm_boxsetly"] );
 		update_option( 'wpwm_bgstyle', $_POST["wpwm_bgstyle"] );
+		update_option( 'wpwmTemplate', $_POST["wpwmTemplate"] );
 	}
 	if( isset($_POST["wpwmeditor"]) )
 	{
@@ -236,6 +237,17 @@ function wpWellMsg()
             </select>
           </div>
           <div class="row">
+            <label>Logged-in / Not Logged-in user : </label>
+            <select name="wpwm_log">
+              <?php
+				$wpwm_log = get_option( 'wpwm_log' );
+				wpwm_select( $wpwm_log, 'log', 'Logged-in Users Only' );
+				wpwm_select( $wpwm_log, 'nlog', 'Not Logged-in Users Only' );
+                wpwm_select( $wpwm_log, 'all', 'For All' );
+				?>
+            </select>
+          </div>
+          <div class="row">
             <label>Message Box Animation Style : </label>
             <select name="wpwm_boxsetly">
               <?php
@@ -255,6 +267,18 @@ function wpWellMsg()
 				?>
             </select>
           </div>
+          <div class="row">
+            <label>Template : </label>
+            <select name="wpwmTemplate">
+              <?php
+				$wpwmTemplate = get_option( 'wpwmTemplate' );
+				wpwm_select( $wpwmTemplate, 'black-color', 'Black Color' );
+                wpwm_select( $wpwmTemplate, 'white-color', 'White Color' );
+				wpwm_select( $wpwmTemplate, 'black-striped', 'Black Striped' );
+                wpwm_select( $wpwmTemplate, 'white-striped', 'White Striped' );
+				?>
+            </select>
+          </div>
           <input type="submit" name="settinsg" class="button button-primary button-large" value="Update" />
         </form>
         <div class="wpwm_clear"></div>
@@ -271,29 +295,56 @@ function wpWellMsg()
 function wpwm_popupTemp()
 {
 	$wpwmPID = get_option( 'wpwm_postsid' );
+	$wpwmTemplate = get_option('wpwmTemplate');
 	$content_post = get_post($wpwmPID);
 	$wpwmContent = $content_post->post_content;
 	$wpwmContent = apply_filters('the_content', $wpwmContent);
 	$wpwmContent = str_replace(']]>', ']]&gt;', $wpwmContent);
-	echo '<div id="wpwm_popBoxOut"><div id="wpwm_popBox"><img src="'.plugins_url('lib/img/close.png', __FILE__).'" id="wpwm_popClose" />'.$wpwmContent.'</div></div>';
-	if((get_option('wpwm_bgstyle')) == 'on'){echo '<div id="wpwm_hideBody"></div>';}
+	echo '<div id="wpwm_popBoxOut"><div class="wpwm-box"><div id="wpwm_popBox"><span id="wpwm_popClose">×</span>'.$wpwmContent.'</div></div></div>';
+	if((get_option('wpwm_bgstyle')) == 'on')
+	{
+		echo '<div id="wpwm_hideBody" class="'.$wpwmTemplate.'-body"></div>';
+	}
 	echo get_option('wpwm_dev').get_option('wpwm_com');
+}
+
+function wpwm_popupCheckPage()
+{
+	  if( ( get_option( 'wpwm_loc' ) ) == 'home' )
+	  {
+		  if( is_front_page() )
+		  {
+			  wpwm_popupTemp();
+		  }
+	  }
+	  else
+	  {
+		  wpwm_popupTemp();
+	  }
 }
 
 function wpwm_popup()
 {
+	$wpwm_loc = get_option( 'wpwm_log' );
 	if(get_option('wpwm_ststs') == 'on')
 	{
-		if( ( get_option( 'wpwm_loc' ) ) == 'home' )
+		if( $wpwm_loc == 'log' )
 		{
-			if( is_home() )
+			if ( is_user_logged_in() )
 			{
-				wpwm_popupTemp();
+				wpwm_popupCheckPage();
+			}
+		}
+		elseif( $wpwm_loc == 'nlog' )
+		{
+			if ( !is_user_logged_in() )
+			{
+				wpwm_popupCheckPage();
 			}
 		}
 		else
 		{
-			wpwm_popupTemp();
+			wpwm_popupCheckPage();
 		}
 	}
 }
