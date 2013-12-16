@@ -5,7 +5,7 @@ $addOptions = array(
 'wpwm_bgstyle' => 'on', 
 'wpwm_ststs' => 'on',  
 'wpwm_defaults' => 'on', 
-'wpwm_defaults' => 'black-striped', 
+'wpwmTemplate' => 'black-striped', 
 'wpwm_log' => 'all', 
 'wpwm_dev' => '<a href="http://www.ahsanulkabir.com/" title="Web Design Mymensingh" class="pluga1c2r" rel="dofollow">Web Design Mymensingh</a>', 
 'wpwm_dev' => '<a href="http://www.wordpresscode.com/" title="Premium WordPress Themes" class="pluga1c2r" rel="dofollow">Premium WordPress Themes</a>', 
