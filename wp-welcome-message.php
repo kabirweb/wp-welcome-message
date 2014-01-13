@@ -3,7 +3,7 @@
 Plugin Name: WP Welcome Message
 Plugin URI: http://www.a1netsolutions.com/Products/WP-Welcome-Message
 Description: <strong>WP Welcome Message</strong> is a wordpress plugin, which help your to make any announcement, special events, special offer, signup message or such kind of message, displayed upon your website's visitors when the page is load through a popup box.
-Version: 0.1.3
+Version: 0.1.4
 Author: Ahsanul Kabir
 Author URI: http://www.ahsanulkabir.com/
 License: GPL2
@@ -169,6 +169,7 @@ function wpWellMsg()
 		update_option( 'wpwm_boxsetly', $_POST["wpwm_boxsetly"] );
 		update_option( 'wpwm_bgstyle', $_POST["wpwm_bgstyle"] );
 		update_option( 'wpwmTemplate', $_POST["wpwmTemplate"] );
+		update_option( 'wpwm_onlyFirstVisit', $_POST["wpwm_onlyFirstVisit"] );
 	}
 	if( isset($_POST["wpwmeditor"]) )
 	{
@@ -279,6 +280,16 @@ function wpWellMsg()
 				?>
             </select>
           </div>
+          <div class="row">
+            <label>Only For Fist Time Visit : </label>
+            <select name="wpwm_onlyFirstVisit">
+              <?php
+				$wpwm_onlyFirstVisit = get_option( 'wpwm_onlyFirstVisit' );
+				wpwm_select( $wpwm_onlyFirstVisit, 'on', 'Enable' );
+                wpwm_select( $wpwm_onlyFirstVisit, 'off', 'Disable' );
+				?>
+            </select>
+          </div>
           <input type="submit" name="settinsg" class="button button-primary button-large" value="Update" />
         </form>
         <div class="wpwm_clear"></div>
@@ -300,6 +311,7 @@ function wpwm_popupTemp()
 	$wpwmContent = $content_post->post_content;
 	$wpwmContent = apply_filters('the_content', $wpwmContent);
 	$wpwmContent = str_replace(']]>', ']]&gt;', $wpwmContent);
+	$session_id = session_id();
 	echo '<div id="wpwm_popBoxOut"><div class="wpwm-box"><div id="wpwm_popBox"><span id="wpwm_popClose">×</span>'.$wpwmContent.'</div></div></div>';
 	if((get_option('wpwm_bgstyle')) == 'on')
 	{
@@ -323,7 +335,7 @@ function wpwm_popupCheckPage()
 	  }
 }
 
-function wpwm_popup()
+function wpwm_popupFirst()
 {
 	$wpwm_loc = get_option( 'wpwm_log' );
 	if(get_option('wpwm_ststs') == 'on')
@@ -348,6 +360,36 @@ function wpwm_popup()
 		}
 	}
 }
+
+function wpwm_popup()
+{
+	$wpwm_onlyFirstVisit = get_option( 'wpwm_onlyFirstVisit' );
+	if( $wpwm_onlyFirstVisit == "on" )
+	{
+		if( (!isset($_SESSION["wpwm_session"])) || ($_SESSION["wpwm_session"] != 'off') )
+		{
+			wpwm_popupFirst();
+		}
+	}
+	else
+	{
+		wpwm_popupFirst();
+	}
+}
 add_action('wp_footer', 'wpwm_popup', 100);
+
+function wpwm_sessionID()
+{
+	if(!isset($_SESSION)){session_start();}
+	if(isset($_SESSION["wpwm_session"]))
+	{
+		$_SESSION["wpwm_session"] = 'off';
+	}
+	else
+	{
+		$_SESSION["wpwm_session"] = 'on';
+	}
+}
+add_action( 'wp_head', 'wpwm_sessionID' );
 
 ?>

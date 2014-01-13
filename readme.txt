@@ -4,7 +4,7 @@ Donate link: http://www.a1netsolutions.com/Donate
 Tags: welcome, welcome message, announcement, special events, special offer, message, popup message.
 Requires at least: 3.3
 Tested up to: 3.8
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,7 @@ No.
 1. Fix home page issue
 2. Add template
 3. Add user logged-in or not logged-in option
+3. Add only for fist time visit option
 
 == Upgrade notice ==
 No upgrade yet
